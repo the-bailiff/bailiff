@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  redis:
+    image: redis:alpine
+
+  auth:
+    build:
+      context: ./auth/
+
+  auth_proxy:
+    build:
+      context: ../../
+      dockerfile: build/Dockerfile
+    depends_on:
+      - redis
+      - auth
+    environment:
+      - BAILIFF_STORE_REDIS_ADDR=redis:6379
+      - BAILIFF_PROXY=http://auth
+
+  app:
+    build:
+      context: ./app/
+
+  app_proxy:
+    build:
+      context: ../../
+      dockerfile: build/Dockerfile
+    depends_on:
+      - redis
+      - app
+    environment:
+      - BAILIFF_STORE_REDIS_ADDR=redis:6379
+      - BAILIFF_PROXY=http://app
+
+  ingress:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - auth_proxy
+      - app_proxy
+    volumes:
+      - ./ingress/nginx.conf:/etc/nginx/nginx.conf:ro
