@@ -27,10 +27,10 @@ func (f *InterceptorFactory) NewInterceptor(h *http.Header) proxy.HeadersInterce
 		valuePrefix: f.ValuePrefix,
 		setPrefix:   f.SetPrefix,
 		delPrefix:   f.DelPrefix,
-		toSave:      new(http.Header),
-		toSaveClean: new(http.Header),
-		toDel:       new(http.Header),
-		toDelClean:  new(http.Header),
+		toSave:      make(http.Header),
+		toSaveClean: make(http.Header),
+		toDel:       make(http.Header),
+		toDelClean:  make(http.Header),
 	}
 
 	i.load()

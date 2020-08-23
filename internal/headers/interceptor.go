@@ -10,43 +10,43 @@ type Interceptor struct {
 	valuePrefix string
 	setPrefix   string
 	delPrefix   string
-	toSave      *http.Header
-	toSaveClean *http.Header
-	toDel       *http.Header
-	toDelClean  *http.Header
+	toSave      http.Header
+	toSaveClean http.Header
+	toDel       http.Header
+	toDelClean  http.Header
 }
 
-func (m *Interceptor) load() {
-	for key, values := range *m.header {
-		if strings.HasPrefix(key, m.setPrefix) {
-			cleanKey := strings.Replace(key, m.setPrefix, "", 1)
+func (i *Interceptor) load() {
+	for key, values := range *i.header {
+		if strings.HasPrefix(key, i.setPrefix) {
+			cleanKey := strings.Replace(key, i.setPrefix, "", 1)
 			for _, value := range values {
-				m.toSave.Add(key, value)
-				m.toSaveClean.Add(cleanKey, value)
+				i.toSave.Add(key, value)
+				i.toSaveClean.Add(cleanKey, value)
 			}
-		} else if strings.HasPrefix(key, m.delPrefix) {
-			cleanKey := strings.Replace(key, m.delPrefix, "", 1)
+		} else if strings.HasPrefix(key, i.delPrefix) {
+			cleanKey := strings.Replace(key, i.delPrefix, "", 1)
 			for _, value := range values {
-				m.toDel.Add(key, value)
-				m.toDelClean.Add(cleanKey, value)
+				i.toDel.Add(key, value)
+				i.toDelClean.Add(cleanKey, value)
 			}
 		}
 	}
 }
 
-func (m *Interceptor) HeadersToSave() http.Header {
-	return *m.toSaveClean
+func (i *Interceptor) HeadersToSave() http.Header {
+	return i.toSaveClean
 }
 
-func (m *Interceptor) HeadersToDel() http.Header {
-	return *m.toDelClean
+func (i *Interceptor) HeadersToDel() http.Header {
+	return i.toDelClean
 }
 
-func (m *Interceptor) ClearDistinctiveHeaders() {
-	for k := range *m.toSave {
-		m.header.Del(k)
+func (i *Interceptor) ClearDistinctiveHeaders() {
+	for k := range i.toSave {
+		i.header.Del(k)
 	}
-	for k := range *m.toDel {
-		m.header.Del(k)
+	for k := range i.toDel {
+		i.header.Del(k)
 	}
 }
