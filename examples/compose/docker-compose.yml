@@ -18,6 +18,7 @@ services:
     environment:
       - BAILIFF_STORE_REDIS_ADDR=redis:6379
       - BAILIFF_PROXY=http://auth
+      - BAILIFF_COOKIE_MAXAGE=3600
 
   app:
     build:
@@ -33,11 +34,12 @@ services:
     environment:
       - BAILIFF_STORE_REDIS_ADDR=redis:6379
       - BAILIFF_PROXY=http://app
+      - BAILIFF_COOKIE_MAXAGE=3600
 
   ingress:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
       - auth_proxy
       - app_proxy
