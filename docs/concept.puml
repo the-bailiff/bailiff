@@ -1,0 +1,36 @@
+@startuml
+actor User as user
+participant "Ingress\ncontroller" as ingress
+participant "Bailiff" as bailiff
+participant "Storage" as storage
+participant "Foo microservice" as ms
+
+user -> ingress: income request /foo/*
+
+ingress -> bailiff: route to bailiff proxy
+note right ingress
+every microservice has
+it's own bailiff sidecar
+end note
+
+bailiff -> storage: restore session data
+
+bailiff -> ms: populate income request with session data
+note right bailiff
+bailiff automatically adds extra headers
+with session data to income request with pattern:
+X-Session-//Foo//: //Bar//
+end note
+
+ms ---> bailiff: backend can optionally pass data to save in response headers
+note left ms
+bailiff will check response headers
+if there are any data to set to session:
+X-Session-Set-//Foo//: //Baz//
+end note
+
+bailiff -> storage: update session data if required
+bailiff ---> ingress: return response
+ingress ---> user: return response
+
+@enduml
