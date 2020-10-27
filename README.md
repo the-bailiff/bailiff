@@ -25,8 +25,30 @@ So if microservice Foo saved `userID` in session, microservice Bar will get it i
 
 Please see example below:
 
-![concept](./docs/concept.png)
+<img src="https://raw.githubusercontent.com/the-bailiff/bailiff/master/docs/concept.png" width="100%" alt="concept" />
 
-## Install
+## Usage
 
-TODO...
+As it was described before it should be run as sidecar for existing backends. 
+
+### Docker image
+
+Basic example is:
+
+```sh
+docker run \
+    -e BAILIFF_STORE_REDIS_ADDR=redis:6379 \
+    -e BAILIFF_PROXY=http://app \
+    -e BAILIFF_COOKIE_MAXAGE=3600 \
+    bailiff/bailiff:latest
+```
+
+You can find more complex example with multiple backends in _examples_ folder.
+
+### Storages
+
+Bailiff is built with support of different stores in mind but only __redis__ storage is supported so far.
+
+### Configuration
+
+TO DO...
