@@ -1,6 +1,6 @@
 @startuml
 actor User as user
-participant "Ingress\ncontroller" as ingress
+participant "Ingress" as ingress
 participant "Bailiff" as bailiff
 participant "Storage" as storage
 participant "Foo microservice" as ms
@@ -19,14 +19,14 @@ bailiff -> ms: populate income request with session data
 note right bailiff
 bailiff automatically adds extra headers
 with session data to income request with pattern:
-X-Session-//Foo//: //Bar//
+<b>X-Session-//Foo//: //Bar//</b>
 end note
 
 ms ---> bailiff: backend can optionally pass data to save in response headers
 note left ms
 bailiff will check response headers
 if there are any data to set to session:
-X-Session-Set-//Foo//: //Baz//
+<b>X-Session-Set-//Foo//: //Baz//</b>
 end note
 
 bailiff -> storage: update session data if required
