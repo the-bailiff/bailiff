@@ -1,6 +1,6 @@
 # bailiff 
 
-Sidecar for distributed session layer for microservices
+Sidecar for distributed session for microservices
 
 ## Problem
 
@@ -21,7 +21,7 @@ If so bailiff enriches request by passing new headers with session data (see exa
 Also, bailiff checks every response if there are any data to save or update in session.
 
 All bailiff sidecars are connected with single storage, so all session data is shared between all microservices.
-So if microservice Foo saved `userID` in session, microservice Bar will get it in next request.
+So if microservice _Foo_ saved `userID` in session, microservice _Bar_ will get it in next request.
 
 Please see example below:
 
